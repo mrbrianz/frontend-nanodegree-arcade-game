@@ -24,11 +24,14 @@ Enemy.prototype.render = function() {
 }
 
 // Now write your own player class
+// TODO: write player class, needs update, render, and handleInput methods
 // This class requires an update(), render() and
 // a handleInput() method.
 
 
 // Now instantiate your objects.
+// TODO: create allEnemies array
+// TODO: put player object in player variable
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
