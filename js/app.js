@@ -25,7 +25,7 @@ Enemy.prototype.update = function(dt) {
 
     // once passes too far to the right, reset to off the left of the screen at some random point
     // so, if x value (right/left axis) is greater than the canvas width, put it back to the leftside
-    if (this.x) > ctx.canvas.clientWidth) {
+    if (this.x > ctx.canvas.clientWidth) {
         this.x = -101; // set off to left of canvas
         this.speed = getRandomInt(20,100); // randomize new speed, but using a range
     }
