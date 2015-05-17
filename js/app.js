@@ -74,14 +74,18 @@ Player.prototype.handleInput = function(keyCode) { // Uses Parameter 'keycode' f
         /* if y coord (up/down axis) is still greater than 100 (101 is the cutoff),
             take itself minus 101 when clicking 'up' because each rows is 101
         */
-        if (this.y > 100) {
+        if (this.y > 1) {
             this.y -= 83; // why 83?  not sure
+            if (this.y < 0) {
+                // draw winner square here
+                // tell user to press 'up'
+            }
         /* but if not, then reset to the beginning
         */
         } else {
             this.x = 303;
             this.y = 485; // now sure on these numbers
-            alert('You Win');
+            // alert('You Win');
             // use up certain amt of lives, then game is over
             if (this.lives === 0) {
                 alert('Game Over');
