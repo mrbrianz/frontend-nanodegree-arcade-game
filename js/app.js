@@ -1,4 +1,6 @@
 
+
+
 // ===== ENEMY =====
 
 // Enemies our player must avoid
@@ -27,7 +29,7 @@ Enemy.prototype.update = function(dt) {
     // so, if x value (right/left axis) is greater than the canvas width, put it back to the leftside
     if (this.x > ctx.canvas.clientWidth) {
         this.x = -101; // set off to left of canvas
-        this.speed = getRandomInt(20,100); // randomize new speed, but using a range
+        this.speed = getRandomInt(50,200); // randomize new speed, but using a range
     }
 };
 
@@ -65,7 +67,7 @@ Player.prototype.render = function() {
 
 // Player handleInput method
 // grid is 707 X 707 (101 per square)
-Player.prototype.handleInput = function() {
+Player.prototype.handleInput = function(keyCode) { // Uses Parameter 'keycode' from document.addEventListener
     // up
     // gotta go 'up' to win
     if (keyCode === 'up') {
@@ -73,12 +75,12 @@ Player.prototype.handleInput = function() {
             take itself minus 101 when clicking 'up' because each rows is 101
         */
         if (this.y > 100) {
-            this.y -= 101;
+            this.y -= 83; // why 83?  not sure
         /* but if not, then reset to the beginning
         */
         } else {
-            this.x = 102; // 1 column over (each is 101)
-            this.y = 607; // 6 rows above where we want to start (6 * 101)
+            this.x = 303;
+            this.y = 485; // now sure on these numbers
             alert('You Win');
             // use up certain amt of lives, then game is over
             if (this.lives === 0) {
@@ -92,8 +94,8 @@ Player.prototype.handleInput = function() {
         /* if y coord (up/down axis) is still less than 607 (6 rows X 101),
             take itself plus 101 when clicking 'down' because each row is 101
         */
-        if (this.y < 607) {
-            this.y += 101;
+        if (this.y < 450) { // why 450?  not sure
+            this.y += 83;
         }
     }
 
@@ -102,7 +104,7 @@ Player.prototype.handleInput = function() {
         /* if x coord (left/right axis) is still more than 101 (1 column x 101),
             take itself minus 101 when clicking 'left' because each row is 101
         */
-        if (this.x > 101) {
+        if (this.x > 80) {
             this.x -= 101
         }
     }
@@ -148,6 +150,13 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+// Create (Instantiate) the enemy bugs using the 'allEnemies' array
+// my thinkings is 2 bugs on top row, 1 bug on the next, 2 on the next, and only 1 on the first row that the player will encounter (and start the first one at a slower speed range)
+var Bug1 = new Enemy(0, 60, getRandomInt(50,200)), Bug1b = new Enemy(303, 60, getRandomInt(50,200)), Bug2 = new Enemy(0, 143, getRandomInt(50,200)), Bug3 = new Enemy(0, 230, getRandomInt(50,200), Bug3b = new Enemy(0, 230, getRandomInt(50,200)), Bug4 = new Enemy(0, 310, getRandomInt(50,100)));
+var allEnemies = [Bug1,Bug1b,Bug2,Bug3,Bug3b,Bug4];
+// Create (Instantiate) the player
+var player = new Player(303,485); // 303 makes sense, but I do not yet grasp the y axis amounts
 
 /* Brian Zuehlke (zell-key), 2015 */
 
