@@ -1,3 +1,6 @@
+
+// ===== ENEMY =====
+
 // Enemies our player must avoid
 var Enemy = function(x, y) {
     // Variables applied to each of our instances go here,
@@ -15,6 +18,7 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    /// takes this.x coordinate plus itself plus this speed times the dt param
     this.x += this.speed*dt;
 }
 
@@ -23,10 +27,88 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-// Now write your own player class
-// TODO: write player class, needs update, render, and handleInput methods
-// This class requires an update(), render() and
-// a handleInput() method.
+
+// ===== PLAYER =====
+
+// Player Class
+var Player = function (x, y) {
+    // coordinates to use
+    this.x = x;
+    this.y = y;
+    // image to use
+    this.sprite = 'images/char-boy.png';
+
+    // Maybe set number of lives here?
+    // Maybe set score/menu here?
+
+};
+
+// Player update method
+Player.prototype.update = function () {
+    // ? not sure yet
+};
+
+// Player render method
+Player.prototype.render = function() {
+    // Draw the same as the enemy render
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+// Player handleInput method
+// grid is 707 X 707 (101 per square)
+Player.prototype.handleInput = function() {
+    // up
+    // gotta go 'up' to win
+    if (keyCode === 'up') {
+        /* if y coord (up/down axis) is still greater than 100 (101 is the cutoff),
+            take itself minus 101 when clicking 'up' because each rows is 101
+        */
+        if (this.y > 100) {
+            this.y -= 101;
+        /* but if not, then reset to the beginning
+        */
+        } else {
+            this.x = 102; // 1 column over (each is 101)
+            this.y = 607; // 6 rows above where we want to start (6 * 101)
+            alert('You Win');
+            // use up certain amt of lives, then game is over
+            if (this.lives === 0) {
+                alert('Game Over');
+            }
+        }
+    }
+
+    // down
+    if (keyCode === 'down') {
+        /* if y coord (up/down axis) is still less than 607 (6 rows X 101),
+            take itself plus 101 when clicking 'down' because each row is 101
+        */
+        if (this.y < 607) {
+            this.y += 101;
+        }
+    }
+
+    // left
+    if (keyCode === 'left') {
+        /* if x coord (left/right axis) is still more than 101 (1 column x 101),
+            take itself minus 101 when clicking 'left' because each row is 101
+        */
+        if (this.x > 101) {
+            this.x -= 101
+        }
+    }
+
+    // right
+    if (keyCode === 'right') {
+        /* if x coord (left/right axis) is still less than 606 (6 columns x 101),
+            take itself plus 101 when clicking 'right' because each row is 101
+        */
+        if (this.x < 606) {
+            this.x += 101
+        }
+    }
+};
+
 
 
 // Now instantiate your objects.
@@ -44,8 +126,15 @@ document.addEventListener('keyup', function(e) {
         37: 'left',
         38: 'up',
         39: 'right',
-        40: 'down'
+        40: 'down',
+        32: 'space',  // add space (commonly used)
+        13: 'enter',  // add enter (commonly used)
+        80: 'p' // add p (maybe for 'pause' or 'player selection')
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+/* Brian Zuehlke (zell-key), 2015 */
+
+
