@@ -1,3 +1,4 @@
+// speed variables used to provide a range of speeds
 var speed1 = 50;
 var speed2 = 300;
 
@@ -14,6 +15,7 @@ var Enemy = function(x, y, speed) {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
+
 };
 
 // Update the enemy's position, required method for game
@@ -51,8 +53,11 @@ var Player = function (x, y) {
 
     this.level = 1;
     this.lives = 3;
+    this.score = 0;
     // Maybe set number of lives here?
     // Maybe set score/menu here?
+
+
 
 };
 
@@ -79,12 +84,17 @@ Player.prototype.handleInput = function(keyCode) { // Uses Parameter 'keycode' f
         if (this.y > 1) {
             this.y -= 83; // why 83?  not sure
             if (this.y < 0) {
-                console.log(this.x,this.y);
-                this.bg = 'images/grass-block.png';
-                console.log(this.bg);
+                // set large text at top announcing a win
+                ctx.clearRect(0,0,707,200);
+                ctx.font = "bold 48px serif";
+                ctx.textAlign = "center";
                 ctx.fillStyle="black";
-                ctx.fillRect(0,0,707,707);
-                ctx.drawImage(Resources.get(this.bg), this.x, this.y);
+                ctx.fillText("WINNER! Level " + this.level + " Complete",353,35);
+
+                // set instructions at bottom to continue
+                ctx.clearRect(200,600,400,200);
+                ctx.font = "bold 20px serif";
+                ctx.fillText("Press UP to continue",353,700);
             }
         /* but if not, then reset to the beginning
         */
@@ -92,15 +102,26 @@ Player.prototype.handleInput = function(keyCode) { // Uses Parameter 'keycode' f
             this.level += 1;
             console.log(this.level);
             console.log(this.x,this.y);
-            ctx.fillStyle="white";
-            ctx.fillRect(0,0,707,707);
+
+            ctx.clearRect(0,0,707,200);
+            ctx.clearRect(200,600,400,200);
 
             this.x = 303;
-            this.y = 485; // now sure on these numbers
+            this.y = 485; // not sure on these numbers
             // alert('You Win');
             // use up certain amt of lives, then game is over
+                ctx.font = "bold 20px serif";
+                ctx.textAlign = "center";
+                ctx.fillStyle="black";
+
             if (this.lives === 0) {
-                alert('Game Over');
+                // end game
+                ctx.fillText("Game Over",353,700);
+            } else {
+                // set new level message + basic instructions
+                ctx.fillText("Level " + this.level,353,35);
+                ctx.fillText("Use Arrow Keys to Navigate",353,700);
+
             }
 
         }
@@ -112,7 +133,11 @@ Player.prototype.handleInput = function(keyCode) { // Uses Parameter 'keycode' f
             take itself plus 101 when clicking 'down' because each row is 101
         */
         if (this.y < 450) { // why 450?  not sure
-            this.y += 83;
+            if (this.y < 0) {
+                // if less than 0 (if now in top row), disallow going down, because they have already won the level
+            } else {
+                this.y += 83;
+            }
         }
     }
 
@@ -122,7 +147,11 @@ Player.prototype.handleInput = function(keyCode) { // Uses Parameter 'keycode' f
             take itself minus 101 when clicking 'left' because each row is 101
         */
         if (this.x > 80) {
-            this.x -= 101
+            if (this.y < 0) {
+                // if less than 0 (if now in top row), disallow going down, because they have already won the level
+            } else {
+                this.x -= 101
+            }
         }
     }
 
@@ -132,7 +161,11 @@ Player.prototype.handleInput = function(keyCode) { // Uses Parameter 'keycode' f
             take itself plus 101 when clicking 'right' because each row is 101
         */
         if (this.x < 606) {
-            this.x += 101
+            if (this.y < 0) {
+                // if less than 0 (if now in top row), disallow going down, because they have already won the level
+            } else {
+                this.x += 101
+            }
         }
     }
 };
