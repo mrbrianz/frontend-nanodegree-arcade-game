@@ -2,7 +2,6 @@
     This file provides the game loop functionality (update entities and render),
     draws the initial game board on the screen, and then calls the update and
     render methods on your player and enemy objects (defined in your app.js).
-    // TODO: Add updated and render methods to app.js
 
     A game engine works by drawing the entire game screen over and over, kind of
     like a flipbook you may have created as a kid. When your player moves across
@@ -79,10 +78,9 @@ var Engine = (function(global) {
         functionality this way (you could just implement collision detection
         on the entities themselves within your app.js file).
      */
-     // TODO: Determine how to handle collisions
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions(); // TODO: possibly used for collisions
+        // checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the
