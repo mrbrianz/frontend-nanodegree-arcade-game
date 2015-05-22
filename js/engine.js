@@ -67,6 +67,16 @@ var Engine = (function(global) {
         reset();
         lastTime = Date.now();
         main();
+
+        // Add initial instructions, score area, lives area, and level 1
+        ctx.font = "bold 20px serif";
+        ctx.fillStyle="black";
+        ctx.fillText("Score",50,700);
+        ctx.fillText("Lives",607,700);
+
+        ctx.textAlign = "center";
+        ctx.fillText("Use Arrow Keys to Navigate",353,700);
+        ctx.fillText("Level 1",353,35);
     } // init of lastTime, calls main
 
     /* This function is called by main (our game loop) and itself calls all
