@@ -26,7 +26,7 @@ var Engine = (function(global) {
         lastTime;
 
     canvas.width = 707; // Make canvas wider (more fun)
-    canvas.height = 707; // Make canvas taller (more fun)
+    canvas.height = 737; // Make canvas taller (more fun)
     doc.body.appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
@@ -45,6 +45,7 @@ var Engine = (function(global) {
         /* Call our update/render functions, pass along the time delta to
             our update function since it may be used for smooth animation.
          */
+
         update(dt); // looks for update function here (app.js)
         render(); // looks for render function here (app.js)
 
@@ -71,11 +72,15 @@ var Engine = (function(global) {
         // Add initial instructions, score area, lives area, and level 1
         ctx.font = "bold 20px serif";
         ctx.fillStyle="black";
+
         ctx.fillText("Score",50,700);
+        ctx.fillText(0,65,720);
+
         ctx.fillText("Lives",607,700);
+        ctx.fillText(5,620,720);
 
         ctx.textAlign = "center";
-        ctx.fillText("Use Arrow Keys to Navigate",353,700);
+        ctx.fillText("Press UP to start",353,710);
         ctx.fillText("Level 1",353,35);
     } // init of lastTime, calls main
 
