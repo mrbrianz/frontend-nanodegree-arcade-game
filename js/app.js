@@ -43,11 +43,11 @@ Enemy.prototype.update = function(dt) {
         // once passes too far to the right, reset to left of the canvas
         this.x = -101;
 
-        /* if level 12 or above, increase the range on the next to the last lane
+        /* if level 8 or above, increase the range on the next to the last lane
         (we want lots of collisions here in the upper levels) */
 
         if(gameIsPlaying) {
-            if (this.level > 11 && this.y === 143) {
+            if (this.level > 7 && this.y === 143) {
                 // randomize new speed, but using a range
                 this.speed = getRandomInt((speed1+this.level),(speed2+(this.level*3)));
             } else {
@@ -298,22 +298,28 @@ Player.prototype.handleInput = function(keyCode) {// Uses Parameter 'keycode' fr
     } // end of 'right'
 
     if (gameHasEnded === true) {
+
+        /* Game has ended, so we allow a press of 'space' to reset everything if they want to play again
+            this involves resetting alot, and clearing spaces and redrawing several things */
+
         if (keyCode === 'space') {
             window.speed1 = 100;
             window.speed2 = 350;
+            // push initial enemy bugs again
             allEnemies.push(new Enemy(0, 60,  getRandomInt(speed1,speed2)));
             allEnemies.push(new Enemy(0, 143,  getRandomInt(speed1,speed2)));
             allEnemies.push(new Enemy(0, 230,  getRandomInt(speed1,speed2)));
             allEnemies.push(new Enemy(0, 310,  getRandomInt(speed1,50)));
+            // game flow variables
             window.gameHasEnded = false;
             window.gameIsPlaying = true;
+            // reset game values
             this.level = 1;
             this.lives = 5;
             this.score = 0;
 
-            ctx.clearRect(40,700,100,50); // clear score display
-
-            ctx.clearRect(0,0,707,200); // clear GAME OVER display
+            ctx.clearRect(40,700,100,50);
+            ctx.clearRect(0,0,707,200);
             ctx.clearRect(600,700,50,50);
             ctx.clearRect(200,600,400,200);
             ctx.font = "bold 20px serif";
@@ -355,38 +361,6 @@ Player.prototype.resetPosition = function() {
         ctx.fillStyle="black";
         ctx.fillText("Press SPACE to Start Over",353,730);
         ctx.fillText("You reached Level " + this.level + "!",353,710);
-
-        /*
-        // create 'parade of bugs'
-        allEnemies.push(new Enemy(-404, 60,  getRandomInt(100,100)));
-        allEnemies.push(new Enemy(-202, 60,  getRandomInt(100,100)));
-        allEnemies.push(new Enemy(0, 60,    getRandomInt(100,100)));
-        allEnemies.push(new Enemy(202, 60,  getRandomInt(100,100)));
-        allEnemies.push(new Enemy(404, 60,  getRandomInt(100,100)));
-        allEnemies.push(new Enemy(606, 60,  getRandomInt(100,100)));
-
-        allEnemies.push(new Enemy(-303, 143, getRandomInt(100,100)));
-        allEnemies.push(new Enemy(-101, 143, getRandomInt(100,100)));
-        allEnemies.push(new Enemy(101, 143, getRandomInt(100,100)));
-        allEnemies.push(new Enemy(303, 143, getRandomInt(100,100)));
-        allEnemies.push(new Enemy(505, 143, getRandomInt(100,100)));
-        allEnemies.push(new Enemy(707, 143, getRandomInt(100,100)));
-
-        allEnemies.push(new Enemy(-404, 230,  getRandomInt(100,100)));
-        allEnemies.push(new Enemy(-202, 230,  getRandomInt(100,100)));
-        allEnemies.push(new Enemy(0, 230, getRandomInt(100,100)));
-        allEnemies.push(new Enemy(202, 230, getRandomInt(100,100)));
-        allEnemies.push(new Enemy(404, 230, getRandomInt(100,100)));
-        allEnemies.push(new Enemy(606, 230, getRandomInt(100,100)));
-
-        allEnemies.push(new Enemy(-303, 310, getRandomInt(100,100)));
-        allEnemies.push(new Enemy(-101, 310, getRandomInt(100,100)));
-        allEnemies.push(new Enemy(101, 310, getRandomInt(100,100)));
-        allEnemies.push(new Enemy(303, 310, getRandomInt(100,100)));
-        allEnemies.push(new Enemy(505, 310, getRandomInt(100,100)));
-        allEnemies.push(new Enemy(707, 310, getRandomInt(100,100)));
-        */
-
     }
 };
 
