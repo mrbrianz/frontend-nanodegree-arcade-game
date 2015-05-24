@@ -1,50 +1,105 @@
-// speed variables used to provide a range of speeds
-var speed1 = 50;
-var speed2 = 270;
+/* ---------------------------- */
+/*  Global Variables            */
+/* ---------------------------- */
 
-// ===== ENEMY =====
+// global speed variables
+var speed1 = 100;
+var speed2 = 350;
 
-// Enemies our player must avoid
+var playerIsPlaying = false;    // Is the Player active?
+var gameIsPlaying = true;       // Is the Game active?
+var gameHasEnded = false;       // Has the Game ended?
+var debugPage = false;          // used to debug the page
+
+/* ---------------------------- */
+/*  Enemy Class                 */
+/* ---------------------------- */
+
 var Enemy = function(x, y, speed) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
     this.x = x;
     this.y = y;
     // how fast?
     this.speed = speed;
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
+    // The image/sprite for our enemies
     this.sprite = 'images/enemy-bug.png';
 };
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-    /// takes this.x coordinate plus itself plus this speed times the dt param
+
+    /* Update the enemy's position, required method for game
+    Parameter: dt, a time delta between ticks
+    You should multiply any movement by the dt parameter
+    which will ensure the game runs at the same speed for all computers.
+    takes this.x coordinate plus itself plus this speed times the dt param */
+
     this.x += this.speed*dt;
+    // set for collision detections (next 4 lines)
+    this.left = this.x;
+    this.top = this.y;
+    this.right = this.x + 70;
+    this.bottom = this.y + 70;
 
-    // once passes too far to the right, reset to off the left of the screen at some random point
-    // so, if x value (right/left axis) is greater than the canvas width, put it back to the leftside
     if (this.x > ctx.canvas.clientWidth) {
-        this.x = -101; // set off to left of canvas
+        // once passes too far to the right, reset to left of the canvas
+        this.x = -101;
 
-        // if level 12 or above, increase the range on the next to the last lane (we want lots of collisions here in the upper levels)
-        if (this.level > 11 && this.y === 143) {
-            this.speed = getRandomInt((speed1+this.level),(speed2+(this.level*3))); // randomize new speed, but using a range
+        /* if level 12 or above, increase the range on the next to the last lane
+        (we want lots of collisions here in the upper levels) */
+
+        if(gameIsPlaying) {
+            if (this.level > 11 && this.y === 143) {
+                // randomize new speed, but using a range
+                this.speed = getRandomInt((speed1+this.level),(speed2+(this.level*3)));
+            } else {
+                // randomize new speed, but using a range
+                this.speed = getRandomInt(speed1,speed2);
+            }
         } else {
-            this.speed = getRandomInt(speed1,speed2); // randomize new speed, but using a range
+            if (this.speed != 100 && this.speed != 200 && this.speed != 400) {
+                this.speed = 0;
+                this.x = -101;
+            }
         }
     }
+
+    /* if the player is active, we check for collisions against the player */
+
+    if(playerIsPlaying) {
+        this.isEnemyColliding(this, player);
+    }
+};
+
+/* Is the Enemy colliding against the player?  if so, subtract a life - and if too many
+lives have been lost, then set the variable for gameHasEnded.  Then clear out the
+past lives, and draw in the new number of lives.  Also let the player know they
+ran into an enemy (a bug), then reset the player */
+
+Enemy.prototype.isEnemyColliding = function(enemy, player) {
+    if(this.isColliding(enemy, player)) {
+        player.lives -= 1; // Subtract a Life
+        if (player.lives === 0) {
+            gameHasEnded = true;
+        }
+        ctx.clearRect(600,700,50,50);
+        ctx.fillText(player.lives,625,720);
+        ctx.clearRect(200,600,400,200);
+        ctx.fillText("A Bug got you!  Life Lost!  :(",353,710);
+        ctx.fillText("Press UP to continue",353,730);
+        player.resetPosition(); // Reset Player
+    }
+};
+
+Enemy.prototype.isColliding = function(enemy, player) {
+        return !(enemy.top > player.bottom
+               || enemy.left > player.right
+               || enemy.right < player.left
+               || enemy.bottom < player.top);
 };
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
-
 
 // ===== PLAYER =====
 
