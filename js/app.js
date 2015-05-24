@@ -101,162 +101,201 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// ===== PLAYER =====
+/* ---------------------------- */
+/*  Player Class                */
+/* ---------------------------- */
 
-// Player Class
 var Player = function (x, y) {
-    // coordinates to use
     this.x = x;
     this.y = y;
     // image to use
     this.sprite = 'images/char-boy.png';
-
+    // set level, beginning lives, and score
     this.level = 1;
-    this.lives = 3;
+    this.lives = 5;
     this.score = 0;
-    // Maybe set number of lives here?
-    // Maybe set score/menu here?
 };
 
-// Player update method
 Player.prototype.update = function () {
-    // ? not sure yet
+    playerIsPlaying = true;// signal that the player is now playing
+    // set for collision detections (next 4 lines)
+    // https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+    this.left = this.x;
+    this.top = this.y;
+    this.right = this.x + 70;
+    this.bottom = this.y + 70;
 };
 
-// Player render method
 Player.prototype.render = function() {
     // Draw the same as the enemy render
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Player handleInput method
-// grid is 707 X 707 (101 per square)
-Player.prototype.handleInput = function(keyCode) { // Uses Parameter 'keycode' from document.addEventListener
-    // up
-    // gotta go 'up' to win
+Player.prototype.handleInput = function(keyCode) {// Uses Parameter 'keycode' from document.addEventListener
     if (keyCode === 'up') {
-        /* if y coord (up/down axis) is still greater than 100 (101 is the cutoff),
-            take itself minus 101 when clicking 'up' because each rows is 101
-        */
-        if (this.y > 1) {
-            this.y -= 83; // 83 is defined in 'engine.js'
-            if (this.y < 0) {
-                // set large text at top announcing a win
-                ctx.clearRect(0,0,707,200);
-                ctx.font = "bold 48px serif";
-                ctx.textAlign = "center";
-                ctx.fillStyle="black";
-                ctx.fillText("WINNER! Level " + this.level + " Complete",353,35);
 
-                // set instructions at bottom to continue
+        /* if the game has not ended
+            then we allow up to work */
+
+        if (gameHasEnded === false) {
+
+            /* we now look and see if the player is
+            NOT on the top row (has no won yet) */
+
+            if (this.y > 1) {
+                if (debugPage === true) {
+                console.log("up="+this.y);
+                }
+
+            // increment score if step lands on stone square
+                if (this.y >= 28.5 && this.y <= 360.5) {
+                    player.score += 1;              // increment up
+                    ctx.clearRect(40,700,100,50);
+                    ctx.fillText(player.score,70,720); // draw new lives
+                }
+
+                if (this.y <= 526.5) {
+                    ctx.clearRect(200,600,400,180);
+                    ctx.fillText("Use Arrow Keys",353,710);
+                }
+
+                this.y -= 41.5; // 83 is defined in 'engine.js'
+                if (this.y < 0) {
+                    // set large text at top announcing a win
+                    ctx.clearRect(0,0,707,200);
+                    ctx.font = "bold 48px serif";
+                    ctx.textAlign = "center";
+                    ctx.fillStyle="black";
+                    ctx.fillText("Level " + this.level + " WINNER!",353,35);
+
+                    // set instructions at bottom to continue
+                    ctx.clearRect(200,600,400,200);
+                    ctx.font = "bold 20px serif";
+                    ctx.fillText("Press UP to continue",353,710);
+                }
+
+            /* but if not, then reset to the beginning */
+            } else {
+                // else, the player HAS won
+                this.level += 1;
+                player.resetPosition(); // reset player
+
+                /* After a Win, we set new bug enemies when they reach different levels
+                these are done on one of the four rows used by the enemy bugs */
+
+                // first row of enemies (from top down)
+                if (this.level === 3 || this.level === 5) {
+                    // add enemy at level 3 and 5
+                    allEnemies.push(new Enemy(0, 60, getRandomInt(speed1,speed2)));
+                }
+                // second row of enemies (from top down)
+                if (this.level === 2 || this.level === 3) {
+                    // add enemy at level 2 and 3
+                    allEnemies.push(new Enemy(0, 143, getRandomInt(speed1,speed2)));
+                }
+                // third row of enemies (from top down)
+                if (this.level === 4 || this.level === 6) {
+                    // add enemy at level 4 and 6
+                    allEnemies.push(new Enemy(0, 230, getRandomInt(speed1,speed2)));
+                }
+                // fourth row of enemies (from top down)
+                if (this.level === 7) {
+                    // add enemy at level 7
+                    allEnemies.push(new Enemy(0, 310, getRandomInt(speed1,speed2)));
+                }
+
+                if (this.level >= 7) {
+                    // at level 7, add additional speed to both the lower (speed1) and upper (speed2) ranges of speed
+                    window.speed1 = window.speed1 + 5;
+                    window.speed2 = window.speed2 + 2;
+                }
+
+                /* increment 'up' the ranges for variable speed
+                (gap will slowly grow, and range will slowly increment up on each win) */
+
+                window.speed2 = window.speed2 + 5;
+
+                ctx.clearRect(0,0,707,200);
                 ctx.clearRect(200,600,400,200);
                 ctx.font = "bold 20px serif";
-                ctx.fillText("Press UP to continue",353,700);
-            }
-        /* but if not, then reset to the beginning
-        */
-        } else {
-            this.level += 1;
-            console.log(this.level);
-            console.log(this.x,this.y);
-
-            ctx.clearRect(0,0,707,200);
-            ctx.clearRect(200,600,400,200);
-
-            // reset player to starting point
-            this.x = 303;
-            this.y = 485;
-
-            // first row of enemies (from top down)
-            if (this.level === 3 || this.level === 9) {
-                // add enemy at level 3 and 9
-                allEnemies.push(new Enemy(0, 60, getRandomInt(speed1,speed2)));
-            }
-            // second row of enemies (from top down)
-            if (this.level === 2 || this.level === 3) {
-                // add enemy at level 2 and 3
-                allEnemies.push(new Enemy(0, 143, getRandomInt(speed1,speed2)));
-            }
-            // third row of enemies (from top down)
-            if (this.level === 5 || this.level === 7) {
-                // add enemy at level 5 and 7
-                allEnemies.push(new Enemy(0, 230, getRandomInt(speed1,speed2)));
-            }
-            // fourth row of enemies (from top down)
-            if (this.level === 10) {
-                // add enemy at level 10
-                allEnemies.push(new Enemy(0, 310, getRandomInt(speed1,speed2)));
-            }
-
-            if (this.level > 7) {
-                // at level 8, add additional speed to both the lower (speed1) and upper (speed2) ranges of speed
-                window.speed1 = window.speed1 + 5;
-                window.speed2 = window.speed2 + 2;
-            }
-
-            // increment 'up' the ranges for variable speed (gap will slowly grow, and range will slowly increment up on each win)
-            //window.speed1 = window.speed1 + 1;
-            window.speed2 = window.speed2 + 5;
-
-            // use up certain amt of lives, then game is over
-                ctx.font = "bold 20px serif";
                 ctx.textAlign = "center";
                 ctx.fillStyle="black";
 
-            if (this.lives === 0) {
-                // end game
-                ctx.fillText("Game Over",353,700);
-            } else {
-                // set new level message + basic instructions
-                ctx.fillText("Level " + this.level,353,35);
-                ctx.fillText("Use Arrow Keys to Navigate",353,700);
+                // use up certain amt of lives, then game is over
+                if (this.lives === 0) {
+                    // end game
+                    ctx.fillText("Game Over",353,710);
+                } else {
+                    // set new level message + basic instructions
+                    ctx.fillText("Level " + this.level,353,35);
+                    ctx.fillText("Press UP for Level " + this.level,353,710);
 
-            }
+                }
 
-        }
-    }
+            } // end of 'gamepiece has not reached top row'
+        } // end of 'game has not ended'
 
-    // down
+    } // End of 'up'
+
     if (keyCode === 'down') {
-        /* if y coord (up/down axis) is still less than 607 (6 rows X 101),
-            take itself plus 101 when clicking 'down' because each row is 101
-        */
         if (this.y < 450) {
+            if (debugPage === true) {
+                console.log("down="+this.y);
+            }
+            // increment score if step lands on stone square
+            if (this.y >= 28.5 && this.y <= 277.5) {
+                player.score += 1; // increment up
+                ctx.clearRect(40,700,100,50);
+                ctx.fillText(player.score,70,720); // draw new lives
+            }
             if (this.y < 0) {
-                // if less than 0 (if now in top row), disallow going down, because they have already won the level
+                /* if less than 0 (if now in top row),
+                disallow going down, because they have already won the level */
             } else {
-                this.y += 83;
+                this.y += 41.5;
             }
         }
-    }
+    } // End of 'down'
 
-    // left
     if (keyCode === 'left') {
-        /* if x coord (left/right axis) is still more than 101 (1 column x 101),
-            take itself minus 101 when clicking 'left' because each row is 101
-        */
-        if (this.x > 80) {
+        if (this.x > 20 && this.y < 526.5) {
+            if (debugPage === true) {
+                console.log("left="+this.y);
+            }
+            // increment score if step lands on stone square
+            if (this.y >= 28.5 && this.y <= 319) {
+                player.score += 5; // increment up
+                ctx.clearRect(40,700,100,50);
+                ctx.fillText(player.score,70,720); // draw new lives
+            }
             if (this.y < 0) {
-                // if less than 0 (if now in top row), disallow going down, because they have already won the level
+                /* if less than 0 (if now in top row),
+                disallow going down, because they have already won the level */
             } else {
                 this.x -= 101
             }
         }
-    }
+    } // End of 'left'
 
-    // right
     if (keyCode === 'right') {
-        /* if x coord (left/right axis) is still less than 606 (6 columns x 101),
-            take itself plus 101 when clicking 'right' because each row is 101
-        */
-        if (this.x < 606) {
+        if (this.x < 606 && this.y < 526.5) {
+            if (debugPage === true) {
+                console.log("right="+this.y);
+            }
+            // increment score if step lands on stone square
+            if (this.y >= 28.5 && this.y <= 319) {
+                player.score += 5; // increment up
+                ctx.clearRect(40,700,100,50);
+                ctx.fillText(player.score,70,720); // draw new lives
+            }
             if (this.y < 0) {
-                // if less than 0 (if now in top row), disallow going down, because they have already won the level
+                /* if less than 0 (if now in top row),
+                disallow going down, because they have already won the level */
             } else {
                 this.x += 101
             }
         }
-    }
+    } // end of 'right'
 };
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
