@@ -298,6 +298,55 @@ Player.prototype.handleInput = function(keyCode) {// Uses Parameter 'keycode' fr
     } // end of 'right'
 };
 
+/* ---------------------------- */
+/*  Player Reset                */
+/* ---------------------------- */
+
+Player.prototype.resetPosition = function() {
+    this.x = 303;
+    this.y = 526.5;
+
+    /* If 0 lives, draw special messages on canvas
+    and start a 'bug parade' ;) */
+    if (this.lives <= 0) {
+        // signal that game is no longer playing ('window' is the holder for global vars)
+        window.gameIsPlaying = false;
+        ctx.clearRect(0,0,707,200);
+        ctx.font = "bold 48px serif";
+        ctx.textAlign = "center";
+        ctx.fillStyle="black";
+        ctx.fillText("Game Over",353,35);
+
+        ctx.clearRect(200,600,400,200);
+        ctx.font = "bold 20px serif";
+        ctx.textAlign = "center";
+        ctx.fillStyle="black";
+        ctx.fillText("Press SPACE to Start Over",353,710);
+
+        // create 'parade of bugs'
+        allEnemies.push(new Enemy(0, 60,    getRandomInt(400,400)));
+        allEnemies.push(new Enemy(202, 60,  getRandomInt(400,400)));
+        allEnemies.push(new Enemy(404, 60,  getRandomInt(400,400)));
+        allEnemies.push(new Enemy(606, 60,  getRandomInt(400,400)));
+
+        allEnemies.push(new Enemy(101, 143, getRandomInt(200,200)));
+        allEnemies.push(new Enemy(303, 143, getRandomInt(200,200)));
+        allEnemies.push(new Enemy(505, 143, getRandomInt(200,200)));
+        allEnemies.push(new Enemy(707, 143, getRandomInt(200,200)));
+
+        allEnemies.push(new Enemy(0, 230,   getRandomInt(200,200)));
+        allEnemies.push(new Enemy(202, 230, getRandomInt(200,200)));
+        allEnemies.push(new Enemy(404, 230, getRandomInt(200,200)));
+        allEnemies.push(new Enemy(606, 230, getRandomInt(200,200)));
+
+        allEnemies.push(new Enemy(101, 310, getRandomInt(400,400)));
+        allEnemies.push(new Enemy(303, 310, getRandomInt(400,400)));
+        allEnemies.push(new Enemy(505, 310, getRandomInt(400,400)));
+        allEnemies.push(new Enemy(707, 310, getRandomInt(400,400)));
+
+    }
+};
+
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 // Returns a random integer between min (included) and max (excluded)
 // Using Math.round() will give you a non-uniform distribution!
