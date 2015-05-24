@@ -55,10 +55,10 @@ Enemy.prototype.update = function(dt) {
                 this.speed = getRandomInt(speed1,speed2);
             }
         } else {
-            if (this.speed != 100 && this.speed != 200 && this.speed != 400) {
+            //if (this.speed != 100 && this.speed != 200 && this.speed != 400) {
                 this.speed = 0;
                 this.x = -101;
-            }
+            //}
         }
     }
 
@@ -233,7 +233,13 @@ Player.prototype.handleInput = function(keyCode) {// Uses Parameter 'keycode' fr
                 }
 
             } // end of 'gamepiece has not reached top row'
-        } // end of 'game has not ended'
+        } else {
+
+
+
+
+
+        }
 
     } // End of 'up'
 
@@ -296,6 +302,34 @@ Player.prototype.handleInput = function(keyCode) {// Uses Parameter 'keycode' fr
             }
         }
     } // end of 'right'
+
+    if (gameHasEnded === true) {
+        if (keyCode === 'space') {
+            window.speed1 = 100;
+            window.speed2 = 350;
+            allEnemies.push(new Enemy(0, 60,  getRandomInt(speed1,speed2)));
+            allEnemies.push(new Enemy(0, 143,  getRandomInt(speed1,speed2)));
+            allEnemies.push(new Enemy(0, 230,  getRandomInt(speed1,speed2)));
+            allEnemies.push(new Enemy(0, 310,  getRandomInt(speed1,50)));
+            window.gameHasEnded = false;
+            window.gameIsPlaying = true;
+
+            ctx.clearRect(40,700,100,50); // clear score display
+
+            ctx.clearRect(0,0,707,200); // clear GAME OVER display
+            ctx.clearRect(600,700,50,50);
+            ctx.clearRect(200,600,400,200);
+            ctx.font = "bold 20px serif";
+            ctx.fillStyle="black";
+
+            ctx.fillText(0,70,720); // reset score display
+            ctx.fillText(5,625,720); // reset lives display
+
+            ctx.textAlign = "center";
+            ctx.fillText("Press UP to start",353,710);
+            ctx.fillText("Level 1",353,35);
+        }
+    }
 };
 
 /* ---------------------------- */
@@ -311,6 +345,7 @@ Player.prototype.resetPosition = function() {
     if (this.lives <= 0) {
         // signal that game is no longer playing ('window' is the holder for global vars)
         window.gameIsPlaying = false;
+        window.gameHasEnded = true;
         ctx.clearRect(0,0,707,200);
         ctx.font = "bold 48px serif";
         ctx.textAlign = "center";
@@ -321,28 +356,42 @@ Player.prototype.resetPosition = function() {
         ctx.font = "bold 20px serif";
         ctx.textAlign = "center";
         ctx.fillStyle="black";
-        ctx.fillText("Press SPACE to Start Over",353,710);
+        ctx.fillText("Press SPACE to Start Over",353,730);
+        ctx.fillText("You reached Level " + this.level + "!",353,710);
 
+        this.level = 1;
+        this.lives = 5;
+        this.score = 0;
+        /*
         // create 'parade of bugs'
-        allEnemies.push(new Enemy(0, 60,    getRandomInt(400,400)));
-        allEnemies.push(new Enemy(202, 60,  getRandomInt(400,400)));
-        allEnemies.push(new Enemy(404, 60,  getRandomInt(400,400)));
-        allEnemies.push(new Enemy(606, 60,  getRandomInt(400,400)));
+        allEnemies.push(new Enemy(-404, 60,  getRandomInt(100,100)));
+        allEnemies.push(new Enemy(-202, 60,  getRandomInt(100,100)));
+        allEnemies.push(new Enemy(0, 60,    getRandomInt(100,100)));
+        allEnemies.push(new Enemy(202, 60,  getRandomInt(100,100)));
+        allEnemies.push(new Enemy(404, 60,  getRandomInt(100,100)));
+        allEnemies.push(new Enemy(606, 60,  getRandomInt(100,100)));
 
-        allEnemies.push(new Enemy(101, 143, getRandomInt(200,200)));
-        allEnemies.push(new Enemy(303, 143, getRandomInt(200,200)));
-        allEnemies.push(new Enemy(505, 143, getRandomInt(200,200)));
-        allEnemies.push(new Enemy(707, 143, getRandomInt(200,200)));
+        allEnemies.push(new Enemy(-303, 143, getRandomInt(100,100)));
+        allEnemies.push(new Enemy(-101, 143, getRandomInt(100,100)));
+        allEnemies.push(new Enemy(101, 143, getRandomInt(100,100)));
+        allEnemies.push(new Enemy(303, 143, getRandomInt(100,100)));
+        allEnemies.push(new Enemy(505, 143, getRandomInt(100,100)));
+        allEnemies.push(new Enemy(707, 143, getRandomInt(100,100)));
 
-        allEnemies.push(new Enemy(0, 230,   getRandomInt(200,200)));
-        allEnemies.push(new Enemy(202, 230, getRandomInt(200,200)));
-        allEnemies.push(new Enemy(404, 230, getRandomInt(200,200)));
-        allEnemies.push(new Enemy(606, 230, getRandomInt(200,200)));
+        allEnemies.push(new Enemy(-404, 230,  getRandomInt(100,100)));
+        allEnemies.push(new Enemy(-202, 230,  getRandomInt(100,100)));
+        allEnemies.push(new Enemy(0, 230, getRandomInt(100,100)));
+        allEnemies.push(new Enemy(202, 230, getRandomInt(100,100)));
+        allEnemies.push(new Enemy(404, 230, getRandomInt(100,100)));
+        allEnemies.push(new Enemy(606, 230, getRandomInt(100,100)));
 
-        allEnemies.push(new Enemy(101, 310, getRandomInt(400,400)));
-        allEnemies.push(new Enemy(303, 310, getRandomInt(400,400)));
-        allEnemies.push(new Enemy(505, 310, getRandomInt(400,400)));
-        allEnemies.push(new Enemy(707, 310, getRandomInt(400,400)));
+        allEnemies.push(new Enemy(-303, 310, getRandomInt(100,100)));
+        allEnemies.push(new Enemy(-101, 310, getRandomInt(100,100)));
+        allEnemies.push(new Enemy(101, 310, getRandomInt(100,100)));
+        allEnemies.push(new Enemy(303, 310, getRandomInt(100,100)));
+        allEnemies.push(new Enemy(505, 310, getRandomInt(100,100)));
+        allEnemies.push(new Enemy(707, 310, getRandomInt(100,100)));
+        */
 
     }
 };
