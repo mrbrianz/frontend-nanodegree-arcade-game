@@ -16,6 +16,6 @@ If you lose, you will see *GAME OVER* at the top, and be asked to press 'space' 
 
 ####Where did this game come from?####
 
-Good Question.  This is Project 3 of the Udacity Frontend Web Developer Nanodegree ([Udacity Link](http://www.udacity.com)).  Grading of this project uses this rubric: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797 (you may not be able to view this rubric without signing being a Udacity student).
+Good Question.  This is Project 3 of the Udacity Frontend Web Developer Nanodegree ([Udacity Link](http://www.udacity.com)).  Grading of this project uses this rubric: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797 (you may not be able to view this rubric unless you are a Udacity student).
 
 --Brian
