@@ -233,12 +233,6 @@ Player.prototype.handleInput = function(keyCode) {// Uses Parameter 'keycode' fr
                 }
 
             } // end of 'gamepiece has not reached top row'
-        } else {
-
-
-
-
-
         }
 
     } // End of 'up'
@@ -313,6 +307,9 @@ Player.prototype.handleInput = function(keyCode) {// Uses Parameter 'keycode' fr
             allEnemies.push(new Enemy(0, 310,  getRandomInt(speed1,50)));
             window.gameHasEnded = false;
             window.gameIsPlaying = true;
+            this.level = 1;
+            this.lives = 5;
+            this.score = 0;
 
             ctx.clearRect(40,700,100,50); // clear score display
 
@@ -359,9 +356,6 @@ Player.prototype.resetPosition = function() {
         ctx.fillText("Press SPACE to Start Over",353,730);
         ctx.fillText("You reached Level " + this.level + "!",353,710);
 
-        this.level = 1;
-        this.lives = 5;
-        this.score = 0;
         /*
         // create 'parade of bugs'
         allEnemies.push(new Enemy(-404, 60,  getRandomInt(100,100)));
