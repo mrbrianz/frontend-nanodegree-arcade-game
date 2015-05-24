@@ -347,35 +347,57 @@ Player.prototype.resetPosition = function() {
     }
 };
 
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-// Returns a random integer between min (included) and max (excluded)
-// Using Math.round() will give you a non-uniform distribution!
+/* ---------------------------- */
+/*  Generate Random Integer     */
+/* ---------------------------- */
+
+/*
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+Returns a random integer between min (included) and max (excluded)
+*/
+
 var getRandomInt = function(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+/* ---------------------------- */
+/*  Instantiate Classes         */
+/* ---------------------------- */
+
+/* my thinking is to start out with 1 bug on each row
+except the 2nd from the top, and to have the row closest to the player start off slower
+*/
+
+// set variables for my startout enemies (bugs)
+var   Enemy1 = new Enemy(0, 60,  getRandomInt(speed1,speed2))
+    , Enemy2 = new Enemy(0, 143, getRandomInt(speed1,speed2))
+    , Enemy3 = new Enemy(0, 230, getRandomInt(speed1,speed2)
+      // last enemy has slower range (100,50)
+    , Enemy4 = new Enemy(0, 310, getRandomInt(speed1,50)));
+
+// Create (instantiate) allEnemies
+var allEnemies = [Enemy1,Enemy2,Enemy3,Enemy4];
+// Create (Instantiate) the player
+var player = new Player(303,526.5);
+
+/* ---------------------------- */
+/*  Listen for Key Presses      */
+/* ---------------------------- */
+
+/* This listens for key presses and sends the keys to your
+Player.handleInput() method. You don't need to modify this */
+
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
         38: 'up',
         39: 'right',
         40: 'down',
-        32: 'space',  // add space (commonly used)
-        13: 'enter',  // add enter (commonly used)
-        80: 'p' // add p (maybe for 'pause' or 'player selection')
+        32: 'space'
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
-
-// Create (Instantiate) the enemy bugs using the 'allEnemies' array
-// my thinkings is 3 bugs on top row, 2 bugs on the next, 3 on the next, and 2 on the first row that the player will encounter (and start the first one at a slower speed range)
-var Bug1 = new Enemy(0, 60, getRandomInt(speed1,speed2)), Bug3 = new Enemy(0, 230, getRandomInt(speed1,speed2), Bug4 = new Enemy(0, 310, getRandomInt(speed1,150)));
-var allEnemies = [Bug1,Bug3,Bug4];
-// Create (Instantiate) the player
-var player = new Player(303,485); // 303 makes sense, but I do not yet grasp the y axis amounts
 
 /* Brian Zuehlke (zell-key), 2015 */
 
