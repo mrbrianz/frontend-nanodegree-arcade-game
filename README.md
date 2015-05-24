@@ -4,9 +4,9 @@
 This is a classic 'get across the road' game, using ... well, let's call them Ladybugs.  To play, you simply use the arrow keys on your keyboard.  *Up, Down, Left, and Right* will navigate you around the board.  When you step on a stone square you will increase your points.
 
 ###Points & Levels###
-If you are stepping *up* or *down* on stone squares you will gain 1 point per step.  If you are stepping *left* or *right* you will gain 5 points per step (stepping left and right is more dangerous than stepping up and down).  Also, moving up and down are slower than moving left and right.  This allows you to possibly escape an oncoming bug.
+If you are stepping **up** or **down** on stone squares you will gain 1 point per step.  If you are stepping **left** or **right** you will gain 5 points per step (stepping left and right is more dangerous than stepping up and down).  Also, moving up and down are slower than moving left and right.  This allows you to possibly escape an oncoming bug.
 
-The *Up* key is also used to begin each level of the game.  There are unlimited levels.  Play as long as you like!  However, each level will either add more Ladybugs to contend with and/or increase Ladybug speeds.
+The **Up** key is also used to begin each level of the game.  There are unlimited levels.  Play as long as you like!  However, each level will either add more Ladybugs to contend with and/or increase Ladybug speeds.
 
 ###GAME OVER & starting a new game###
 If you lose, you will see *GAME OVER* at the top, and be asked to press 'space' on your keyboard.  This will start a new game, at level 0 and with a 0 score again.
