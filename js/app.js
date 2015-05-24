@@ -140,7 +140,7 @@ Player.prototype.handleInput = function(keyCode) {// Uses Parameter 'keycode' fr
         if (gameHasEnded === false) {
 
             /* we now look and see if the player is
-            NOT on the top row (has no won yet) */
+            NOT on the top row (has not won yet) */
 
             if (this.y > 1) {
                 if (debugPage === true) {
